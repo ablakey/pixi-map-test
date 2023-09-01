@@ -1,5 +1,5 @@
 import { Viewport } from "pixi-viewport";
-import { Application, Graphics, Sprite, Texture } from "pixi.js";
+import { Application, Graphics, SCALE_MODES, Sprite } from "pixi.js";
 
 import { Layer } from "./Layer";
 
@@ -16,6 +16,7 @@ export class App {
     this.app = new Application({
       resizeTo: frameEl,
       resolution: devicePixelRatio,
+      antialias: true,
     });
 
     frameEl.appendChild(this.app.view as HTMLCanvasElement);
@@ -33,15 +34,25 @@ export class App {
     this.viewport.drag().pinch().wheel().decelerate();
 
     this.viewport.on("zoomed", () => {
-      this.layers.forEach((l) => l.render(this.viewport.scale.x));
+      this.rerender();
     });
 
     this.graphics = new Graphics();
     this.viewport.addChild(this.graphics);
   }
 
+  rerender() {
+    this.layers.forEach((l) => l.render(this.viewport.scale.x));
+  }
+
   setScale(scale: number) {
-    this.viewport.scale = { x: scale, y: scale };
+    this.viewport.setZoom(scale, true);
+
+    // this.rerender();
+  }
+
+  centerOn(x: number, y: number) {
+    this.viewport.moveCenter(x, y);
   }
 
   addLayer(layer: Layer) {
@@ -52,6 +63,9 @@ export class App {
 
   addBackground(src: string, width: number, height: number, scale: number) {
     this.background = Sprite.from(src);
+    this.background.y = height * scale;
+    this.background.scale = { x: scale, y: -scale };
+    this.background.texture.baseTexture.scaleMode = SCALE_MODES.NEAREST;
     this.viewport.addChild(this.background);
   }
 }
