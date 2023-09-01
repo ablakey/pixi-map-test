@@ -1,6 +1,12 @@
 # pixi-map-test
 
-A watched pot never boilerplates.
+## Test instructions
 
-Yes, this is just my personal boilerplate for the minimal _comfortable_ configuration.
+1. Extract a `<magical data>.map` file into `pixi-map-test/testdata`
 
+2.
+
+```
+npm ci
+npm run start
+```
