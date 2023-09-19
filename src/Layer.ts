@@ -6,6 +6,9 @@ export class Layer {
   public container: Container<Graphics>;
   private features: Feature[];
 
+  // true for an index if that feature has already been mounted. Used to handlde render vs. re-render.
+  private isMounted: boolean[] = [];
+
   constructor(features: any[]) {
     this.container = new Container();
     this.features = features;
@@ -20,19 +23,26 @@ export class Layer {
       const geom = feature.geometry;
       // Get the graphics object and clear it.
       const graphics = this.container.getChildAt(idx);
-      graphics.clear();
 
       if (geom.type === "LineString") {
-        this.renderLineStyle(graphics, geom, scale);
+        // graphics.clear();
+        // this.renderLineStyle(graphics, geom, scale);
       } else if (geom.type === "Polygon") {
-        this.renderPolygonStyle(graphics, geom, scale);
+        if (this.isMounted[idx]) {
+          this.reRenderPolygonStyle(graphics, geom, scale);
+        } else {
+          graphics.clear();
+          this.renderPolygonStyle(graphics, geom, scale);
+          this.isMounted[idx] = true;
+        }
       } else if (geom.type === "Point") {
-        this.renderPointStyle(graphics, geom, scale);
+        // graphics.clear();
+        // this.renderPointStyle(graphics, geom, scale);
       }
     });
   }
 
-  renderPolygonStyle(graphics: Graphics, polygon: Polygon, scale: number) {
+  private renderPolygonStyle(graphics: Graphics, polygon: Polygon, scale: number) {
     const BORDER_THICKNESS = 2;
     const BORDER_COLOR = 0x009a00;
     const BORDER_ALPHA = 1;
@@ -55,7 +65,43 @@ export class Layer {
     graphics.endFill();
   }
 
-  renderPointStyle(graphics: Graphics, point: Point, scale: number) {
+  /**
+   * Once already created, an attempt to more performantly update the graphics.
+   */
+  private reRenderPolygonStyle(graphics: Graphics, polygon: Polygon, scale: number) {
+    // graphics.clear();
+    const BORDER_THICKNESS = 2;
+    const BORDER_COLOR = 0x009a00;
+    const BORDER_ALPHA = 1;
+
+    const FILL_COLOR = 0x009a00;
+    const FILL_ALPHA = 0.6;
+
+    const coords = polygon.coordinates[0];
+
+    const thickness = BORDER_THICKNESS / scale;
+
+    graphics.geometry.graphicsData.forEach((d) => {
+      // d.fillStyle.color = FILL_COLOR;
+      d.lineStyle.width = thickness;
+    });
+
+    graphics.geometry.invalidate();
+
+    // graphics.lineStyle(BORDER_THICKNESS / scale, BORDER_COLOR, BORDER_ALPHA);
+    // // First step is a move to, to begin the draw.
+    // graphics.moveTo(coords[0][0], coords[0][1]);
+
+    // graphics.beginFill(FILL_COLOR, FILL_ALPHA);
+
+    // for (let x = 1; x < coords.length; x++) {
+    //   graphics.lineTo(coords[x][0], coords[x][1]);
+    // }
+
+    // graphics.endFill();
+  }
+
+  private renderPointStyle(graphics: Graphics, point: Point, scale: number) {
     const POINT_COLOR = 0x00cc00;
     const BORDER_THICKNESS = 0.1;
     const BORDER_COLOR = 0x000000;
@@ -67,7 +113,7 @@ export class Layer {
     graphics.endFill();
   }
 
-  renderLineStyle(graphics: Graphics, line: LineString, scale: number) {
+  private renderLineStyle(graphics: Graphics, line: LineString, scale: number) {
     const coords = line.coordinates;
 
     graphics.lineStyle(1 / scale, 0x00ff00);

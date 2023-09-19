@@ -24,13 +24,13 @@ window.onload = () => {
     (slamData.height * slamData.resolution) / 2,
   );
 
-  let t = 0;
-  function updateCamera() {
-    t += 0.03;
+  // const t = 0;
+  // function updateCamera() {
+  //   t += 0.03;
 
-    app.setScale(Math.max((Math.cos(t) + 1) * 10, 1));
-    requestAnimationFrame(updateCamera);
-  }
+  //   app.setScale(Math.max((Math.cos(t) + 1) * 10, 1));
+  //   requestAnimationFrame(updateCamera);
+  // }
 
   // requestAnimationFrame(updateCamera);
 };
