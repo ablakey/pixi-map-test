@@ -2,7 +2,6 @@ import { Viewport } from "pixi-viewport";
 import { Application, Graphics, SCALE_MODES, Sprite } from "pixi.js";
 
 import { Layer } from "./Layer";
-
 export class App {
   private app: Application;
   private viewport: Viewport;
@@ -48,7 +47,7 @@ export class App {
   setScale(scale: number) {
     this.viewport.setZoom(scale, true);
 
-    // this.rerender();
+    this.rerender();
   }
 
   centerOn(x: number, y: number) {
@@ -61,9 +60,17 @@ export class App {
     layer.render(this.viewport.scale.x);
   }
 
-  addBackground(src: string, width: number, height: number, scale: number) {
+  addBackground(
+    src: string,
+    width: number,
+    height: number,
+    scale: number,
+    originX: number,
+    originY: number,
+  ) {
     this.background = Sprite.from(src);
-    this.background.y = height * scale;
+    this.background.x = originX;
+    this.background.y = height * scale + originY;
     this.background.scale = { x: scale, y: -scale };
     this.background.texture.baseTexture.scaleMode = SCALE_MODES.NEAREST;
     this.viewport.addChild(this.background);

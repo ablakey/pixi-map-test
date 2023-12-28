@@ -11,7 +11,14 @@ import locusPoints from "../testdata/locus_points.json";
 window.onload = () => {
   const app = new App();
 
-  app.addBackground(slam, slamData.width, slamData.height, slamData.resolution);
+  app.addBackground(
+    slam,
+    slamData.width,
+    slamData.height,
+    slamData.resolution,
+    slamData.origin_x,
+    slamData.origin_y,
+  );
 
   const regionlayer = new Layer(regions);
   app.addLayer(regionlayer);
@@ -24,13 +31,13 @@ window.onload = () => {
     (slamData.height * slamData.resolution) / 2,
   );
 
-  // const t = 0;
-  // function updateCamera() {
-  //   t += 0.03;
+  let t = 0;
+  function updateCamera() {
+    t += 0.03;
 
-  //   app.setScale(Math.max((Math.cos(t) + 1) * 10, 1));
-  //   requestAnimationFrame(updateCamera);
-  // }
+    app.setScale(Math.max((Math.cos(t) + 1) * 10, 1));
+    requestAnimationFrame(updateCamera);
+  }
 
-  // requestAnimationFrame(updateCamera);
+  requestAnimationFrame(updateCamera);
 };

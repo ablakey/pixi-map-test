@@ -43,7 +43,7 @@ export class Layer {
   }
 
   private renderPolygonStyle(graphics: Graphics, polygon: Polygon, scale: number) {
-    const BORDER_THICKNESS = 2;
+    const BORDER_THICKNESS = 1;
     const BORDER_COLOR = 0x009a00;
     const BORDER_ALPHA = 1;
 
@@ -69,36 +69,13 @@ export class Layer {
    * Once already created, an attempt to more performantly update the graphics.
    */
   private reRenderPolygonStyle(graphics: Graphics, polygon: Polygon, scale: number) {
-    // graphics.clear();
     const BORDER_THICKNESS = 2;
-    const BORDER_COLOR = 0x009a00;
-    const BORDER_ALPHA = 1;
-
-    const FILL_COLOR = 0x009a00;
-    const FILL_ALPHA = 0.6;
-
-    const coords = polygon.coordinates[0];
-
     const thickness = BORDER_THICKNESS / scale;
 
-    graphics.geometry.graphicsData.forEach((d) => {
-      // d.fillStyle.color = FILL_COLOR;
-      d.lineStyle.width = thickness;
-    });
-
+    for (let x = 0; x < graphics.geometry.graphicsData.length; x++) {
+      graphics.geometry.graphicsData[x].lineStyle.width = thickness;
+    }
     graphics.geometry.invalidate();
-
-    // graphics.lineStyle(BORDER_THICKNESS / scale, BORDER_COLOR, BORDER_ALPHA);
-    // // First step is a move to, to begin the draw.
-    // graphics.moveTo(coords[0][0], coords[0][1]);
-
-    // graphics.beginFill(FILL_COLOR, FILL_ALPHA);
-
-    // for (let x = 1; x < coords.length; x++) {
-    //   graphics.lineTo(coords[x][0], coords[x][1]);
-    // }
-
-    // graphics.endFill();
   }
 
   private renderPointStyle(graphics: Graphics, point: Point, scale: number) {
