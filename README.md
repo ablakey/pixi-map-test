@@ -28,3 +28,43 @@ A basic test seems to show it really doesn't help performance much. There's stil
 See: https://stackoverflow.com/questions/72056609/pixi-js-how-to-draw-outline-of-container-while-keeping-its-content-transparent
 
 And: https://github.com/pixijs/pixijs/discussions/7728
+
+
+## Things I want
+
+
+### Interaction
+
+- Click on element
+- drag box for select
+- Drag element(s)
+- Reshape polygon with handles
+- Add handles to polygon
+
+
+### Styles
+- Highlight selected feature (tint filter?)
+- arrow patterns on polygon
+- text labels that don't scale
+- text labels that do scale
+
+
+### Layers
+- Support lines with arrow end-caps.
+- Support points from SVG
+
+### Animation
+- Lerp pan/zoom to a feature
+
+
+### Optimization
+- cull out-of-frame features
+  - r-tree of bounding boxes?
+
+
+### Architecture
+- Determine sensible API for passing in immutable (eg. Immer) GeoJSON objects
+- Sensible API for passing in list of selected features
+- Sensible API for layer settings
+  - Visible?
+  - Labels?
